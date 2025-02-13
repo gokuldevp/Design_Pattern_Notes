@@ -46,6 +46,7 @@ A power adapter that allows a device with a foreign plug to work with a local po
 
 **Code Example**:  
 ```python
+# Object Adapter
 # Target Interface
 class Target:
     def request(self):
@@ -68,6 +69,23 @@ class Adapter(Target):
 adaptee = Adaptee()
 adapter = Adapter(adaptee)
 print(adapter.request())  # Output: Adapter: (TRANSLATED) Special behavior of the Adaptee.
+
+# Class Adapter (Using Inheritance)
+class Ethernet:
+    def connect_to_ethernet(self):
+        print("Connecting to Ethernet...")
+
+class USB:
+    def connect_to_usb(self):
+        pass
+
+class USBToEthernetAdapter(USB, Ethernet):
+    def connect_to_usb(self):
+        self.connect_to_ethernet()
+
+# Usage
+adapter = USBToEthernetAdapter()
+adapter.connect_to_usb()  # Output: Connecting to Ethernet...
 ```
 
 **When to use**:  

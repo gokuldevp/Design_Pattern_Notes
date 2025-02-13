@@ -46,46 +46,45 @@ A power adapter that allows a device with a foreign plug to work with a local po
 
 **Code Example**:  
 ```python
-# Object Adapter
-# Target Interface
-class Target:
-    def request(self):
-        return "Target: The default target's behavior."
-
-# Adaptee (Incompatible Interface)
-class Adaptee:
-    def specific_request(self):
-        return ".eetpadA eht fo roivaheb laicepS"
-
-# Adapter
-class Adapter(Target):
-    def __init__(self, adaptee: Adaptee):
-        self.adaptee = adaptee
-
-    def request(self):
-        return f"Adapter: (TRANSLATED) {self.adaptee.specific_request()[::-1]}"
-
-# Usage
-adaptee = Adaptee()
-adapter = Adapter(adaptee)
-print(adapter.request())  # Output: Adapter: (TRANSLATED) Special behavior of the Adaptee.
-
-# Class Adapter (Using Inheritance)
-class Ethernet:
-    def connect_to_ethernet(self):
-        print("Connecting to Ethernet...")
-
-class USB:
-    def connect_to_usb(self):
+# Object Adapter (Using Composition)
+class EnglishSpeaker:
+    def speak_english(self):
         pass
 
-class USBToEthernetAdapter(USB, Ethernet):
-    def connect_to_usb(self):
-        self.connect_to_ethernet()
+class FrenchSpeaker:
+    def speak_french(self):
+        return "Bonjour!"
+
+class TranslatorAdapter(EnglishSpeaker):
+    def __init__(self, french_speaker):
+        self.french_speaker = french_speaker
+
+    def speak_english(self):
+        return self.french_speaker.speak_french()
 
 # Usage
-adapter = USBToEthernetAdapter()
-adapter.connect_to_usb()  # Output: Connecting to Ethernet...
+french_speaker = FrenchSpeaker()
+translator = TranslatorAdapter(french_speaker)
+print(translator.speak_english())  # Output: Bonjour!
+
+
+# Class Adapter (Using Inheritance)
+class FrenchSpeaker:
+    def speak_french(self):
+        return "Bonjour!"
+
+class EnglishSpeaker:
+    def speak_english(self):
+        pass
+
+class TranslatorAdapter(EnglishSpeaker, FrenchSpeaker):
+    def speak_english(self):
+        return self.speak_french()
+
+# Usage
+translator = TranslatorAdapter()
+print(translator.speak_english())  # Output: Bonjour!
+
 ```
 
 **When to use**:  
